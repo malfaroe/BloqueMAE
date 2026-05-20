@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">BloqueMAE</string>
+    <string name="nav_current">Bloque actual</string>
+    <string name="nav_history">Historial</string>
+    <string name="block_number">Bloque #%d</string>
+    <string name="progress_pct">%d%%</string>
+    <string name="add_task">Nueva tarea</string>
+    <string name="task_hint">Describe la tarea…</string>
+    <string name="add">Agregar</string>
+    <string name="cancel">Cancelar</string>
+    <string name="close_block">Cerrar bloque</string>
+    <string name="close_block_title">¿Cerrar bloque?</string>
+    <string name="close_block_message">Las tareas pendientes se trasladarán al nuevo bloque.</string>
+    <string name="close">Cerrar</string>
+    <string name="history_empty">Aún no hay bloques cerrados.</string>
+</resources>
