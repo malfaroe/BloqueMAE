@@ -6,9 +6,13 @@ import java.util.*
 object WeekUtils {
     private val locale = Locale("es", "CL")
 
+    // Robust Monday-based week: does not rely on locale's firstDayOfWeek
     fun currentWeekStart(): Long {
-        val cal = Calendar.getInstance(locale)
-        cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY)
+        val cal = Calendar.getInstance()
+        val dow = cal.get(Calendar.DAY_OF_WEEK)
+        // Days since Monday: Mon=0, Tue=1, ..., Sun=6
+        val daysFromMonday = (dow - Calendar.MONDAY + 7) % 7
+        cal.add(Calendar.DAY_OF_YEAR, -daysFromMonday)
         cal.set(Calendar.HOUR_OF_DAY, 0)
         cal.set(Calendar.MINUTE, 0)
         cal.set(Calendar.SECOND, 0)
@@ -17,16 +21,33 @@ object WeekUtils {
     }
 
     fun currentWeekEnd(): Long {
-        val cal = Calendar.getInstance(locale)
-        cal.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY)
+        val cal = Calendar.getInstance()
+        val dow = cal.get(Calendar.DAY_OF_WEEK)
+        val daysToSunday = (Calendar.SUNDAY + 7 - dow) % 7
+        cal.add(Calendar.DAY_OF_YEAR, daysToSunday)
         cal.set(Calendar.HOUR_OF_DAY, 23)
         cal.set(Calendar.MINUTE, 59)
         cal.set(Calendar.SECOND, 59)
         cal.set(Calendar.MILLISECOND, 999)
-        // If today is after Monday, we need to advance to the NEXT Sunday
-        if (Calendar.getInstance(locale).get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY) {
-            cal.add(Calendar.WEEK_OF_YEAR, 1)
+        return cal.timeInMillis
+    }
+
+    fun nextSundayNoon(): Long {
+        val cal = Calendar.getInstance()
+        val dow = cal.get(Calendar.DAY_OF_WEEK)
+        val daysToSunday = (Calendar.SUNDAY + 7 - dow) % 7
+        if (daysToSunday > 0) {
+            cal.add(Calendar.DAY_OF_YEAR, daysToSunday)
+        } else {
+            // Today is Sunday — if already past noon, target next Sunday
+            if (cal.get(Calendar.HOUR_OF_DAY) >= 12) {
+                cal.add(Calendar.WEEK_OF_YEAR, 1)
+            }
         }
+        cal.set(Calendar.HOUR_OF_DAY, 12)
+        cal.set(Calendar.MINUTE, 0)
+        cal.set(Calendar.SECOND, 0)
+        cal.set(Calendar.MILLISECOND, 0)
         return cal.timeInMillis
     }
 
@@ -35,6 +56,5 @@ object WeekUtils {
         return "${fmt.format(Date(start))} – ${fmt.format(Date(end))}"
     }
 
-    fun isBlockExpired(weekEnd: Long): Boolean =
-        System.currentTimeMillis() > weekEnd
+    fun isBlockExpired(weekEnd: Long): Boolean = System.currentTimeMillis() > weekEnd
 }

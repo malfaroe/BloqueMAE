@@ -7,6 +7,7 @@ import com.bloquemae.util.WeekUtils
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
+import java.util.UUID
 
 class MainViewModel(app: Application) : AndroidViewModel(app) {
     private val db = AppDatabase.get(app)
@@ -26,15 +27,36 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
     }
 
     private suspend fun ensureActiveBlock() {
-        if (blockDao.activeBlockOnce() == null) createNewBlock()
+        val active = blockDao.activeBlockOnce()
+        when {
+            active == null -> createNewBlock()
+            // Phone was off on Sunday — close expired block now
+            WeekUtils.isBlockExpired(active.weekEnd) -> closeAndCarryOver(active)
+        }
     }
 
-    suspend fun createNewBlock() {
+    private suspend fun closeAndCarryOver(block: Block) {
+        val total = taskDao.count(block.id)
+        val done = taskDao.doneCount(block.id)
+        val pct = if (total > 0) done.toFloat() / total else 0f
+        blockDao.update(block.copy(status = BlockStatus.CLOSED, completionPct = pct))
+
+        val undone = taskDao.undoneTasks(block.id)
+        createNewBlock()
+        val newBlock = blockDao.activeBlockOnce() ?: return
+        if (undone.isNotEmpty()) {
+            taskDao.insertAll(undone.mapIndexed { i, t ->
+                t.copy(id = UUID.randomUUID().toString(), blockId = newBlock.id,
+                    isCarriedOver = true, isDone = false, sortOrder = i)
+            })
+        }
+    }
+
+    private suspend fun createNewBlock() {
         val last = blockDao.latestBlock()
-        val nextNumber = (last?.number ?: 0) + 1
         blockDao.insert(
             Block(
-                number = nextNumber,
+                number = (last?.number ?: 0) + 1,
                 weekStart = WeekUtils.currentWeekStart(),
                 weekEnd = WeekUtils.currentWeekEnd()
             )
@@ -44,18 +66,7 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
     fun closeBlockAndCreateNew() {
         viewModelScope.launch {
             val active = blockDao.activeBlockOnce() ?: return@launch
-            val total = taskDao.count(active.id)
-            val done = taskDao.doneCount(active.id)
-            val pct = if (total > 0) done.toFloat() / total else 0f
-            blockDao.update(active.copy(status = BlockStatus.CLOSED, completionPct = pct))
-
-            val undone = taskDao.undoneTasks(active.id)
-            createNewBlock()
-            val newBlock = blockDao.activeBlockOnce() ?: return@launch
-            val carriedTasks = undone.mapIndexed { i, t ->
-                t.copy(id = java.util.UUID.randomUUID().toString(), blockId = newBlock.id, isCarriedOver = true, isDone = false, sortOrder = i)
-            }
-            taskDao.insertAll(carriedTasks)
+            closeAndCarryOver(active)
         }
     }
 
