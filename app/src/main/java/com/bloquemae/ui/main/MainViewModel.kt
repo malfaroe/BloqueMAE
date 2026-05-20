@@ -2,7 +2,10 @@ package com.bloquemae.ui.main
 
 import android.app.Application
 import androidx.lifecycle.*
-import com.bloquemae.data.*
+import com.bloquemae.data.AppDatabase
+import com.bloquemae.data.Block
+import com.bloquemae.data.BlockStatus
+import com.bloquemae.data.Task
 import com.bloquemae.util.WeekUtils
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
