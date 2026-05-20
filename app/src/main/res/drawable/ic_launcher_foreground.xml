@@ -5,28 +5,36 @@
     android:viewportWidth="108"
     android:viewportHeight="108">
 
-    <!-- Book body -->
+    <!-- Bar 1 (left, short) — 40% opacity -->
     <path
-        android:fillColor="#C8965A"
-        android:pathData="M30,26 C30,26 30,82 30,82 C30,84.2 31.8,86 34,86 L76,86 C78.2,86 80,84.2 80,82 L80,34 C80,31.8 78.2,30 76,30 L38,30 L38,22 L30,26 Z"/>
-    <!-- Spine shadow -->
+        android:fillColor="#FFFFFF"
+        android:fillAlpha="0.4"
+        android:pathData="M29,64 L37,64 A4,4 0 0,1 41,68 L41,82 L25,82 L25,68 A4,4 0 0,1 29,64 Z"/>
+
+    <!-- Bar 2 (center, medium) — 70% opacity -->
     <path
-        android:fillColor="#A0743A"
-        android:pathData="M38,22 L38,30 L76,30 C78.2,30 80,31.8 80,34 L80,82 C80,84.2 78.2,86 76,86 L34,86 C31.8,86 30,84.2 30,82 L30,26 L38,22 Z"/>
-    <!-- Lines on book -->
+        android:fillColor="#FFFFFF"
+        android:fillAlpha="0.7"
+        android:pathData="M51,50 L59,50 A4,4 0 0,1 63,54 L63,82 L47,82 L47,54 A4,4 0 0,1 51,50 Z"/>
+
+    <!-- Bar 3 (right, tall) — full white -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:fillAlpha="1.0"
+        android:pathData="M73,34 L79,34 A4,4 0 0,1 83,38 L83,82 L67,82 L67,38 A4,4 0 0,1 73,34 Z"/>
+
+    <!-- Checkmark above bar 3 -->
+    <path
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="3.5"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:pathData="M68,25 L73,30 L83,19"/>
+
+    <!-- Base line -->
     <path
         android:strokeColor="#FFFFFF"
         android:strokeWidth="2.5"
-        android:strokeAlpha="0.6"
-        android:pathData="M44,46 L72,46"/>
-    <path
-        android:strokeColor="#FFFFFF"
-        android:strokeWidth="2.5"
-        android:strokeAlpha="0.6"
-        android:pathData="M44,56 L72,56"/>
-    <path
-        android:strokeColor="#FFFFFF"
-        android:strokeWidth="2.5"
-        android:strokeAlpha="0.6"
-        android:pathData="M44,66 L62,66"/>
+        android:strokeAlpha="0.5"
+        android:pathData="M22,83 L86,83"/>
 </vector>
