@@ -22,4 +22,16 @@ interface BlockDao {
 
     @Update
     suspend fun update(block: Block)
+
+    @Query("""
+        SELECT b.id, b.number, b.weekStart, b.weekEnd, b.status, b.completionPct, b.createdAt,
+               COUNT(t.id) AS totalTasks,
+               SUM(CASE WHEN t.isDone = 1 THEN 1 ELSE 0 END) AS doneTasks
+        FROM blocks b
+        LEFT JOIN tasks t ON t.blockId = b.id
+        WHERE b.status = 'CLOSED'
+        GROUP BY b.id
+        ORDER BY b.number DESC
+    """)
+    fun closedBlocksWithStats(): Flow<List<BlockWithStats>>
 }
