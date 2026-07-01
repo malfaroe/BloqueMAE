@@ -57,4 +57,31 @@ object WeekUtils {
     }
 
     fun isBlockExpired(weekEnd: Long): Boolean = System.currentTimeMillis() > weekEnd
+
+    fun startOfDay(time: Long = System.currentTimeMillis()): Long {
+        val cal = Calendar.getInstance()
+        cal.timeInMillis = time
+        cal.set(Calendar.HOUR_OF_DAY, 0)
+        cal.set(Calendar.MINUTE, 0)
+        cal.set(Calendar.SECOND, 0)
+        cal.set(Calendar.MILLISECOND, 0)
+        return cal.timeInMillis
+    }
+
+    fun previousWeekStart(): Long {
+        val cal = Calendar.getInstance()
+        cal.timeInMillis = currentWeekStart()
+        cal.add(Calendar.DAY_OF_YEAR, -7)
+        return cal.timeInMillis
+    }
+
+    fun previousWeekEnd(): Long {
+        val cal = Calendar.getInstance()
+        cal.timeInMillis = currentWeekEnd()
+        cal.add(Calendar.DAY_OF_YEAR, -7)
+        return cal.timeInMillis
+    }
+
+    fun daysBetweenInclusive(startDay: Long, endDay: Long): Int =
+        if (endDay < startDay) 0 else ((endDay - startDay) / 86_400_000L).toInt() + 1
 }

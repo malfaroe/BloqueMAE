@@ -15,4 +15,11 @@
     <string name="close">Cerrar</string>
     <string name="history_empty">Aún no hay bloques cerrados.</string>
     <string name="task_count">%1$d / %2$d tareas</string>
+    <string name="nav_habits">Hábitos</string>
+    <string name="habits_empty">No hay hábitos activos.</string>
+    <string name="habit_report_title">Hábitos esta semana</string>
+    <string name="habit_report_row">%1$s: %2$d/%3$d</string>
+    <string name="habit_report_vs_last">vs %1$d/%2$d semana pasada</string>
+    <string name="habit_report_overall">Cumplimiento general: %d%%</string>
+    <string name="habit_report_empty">Aún no hay datos de hábitos esta semana.</string>
 </resources>

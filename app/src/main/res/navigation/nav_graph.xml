@@ -13,4 +13,9 @@
         android:id="@+id/historyFragment"
         android:name="com.bloquemae.ui.history.HistoryFragment"
         android:label="@string/nav_history" />
+
+    <fragment
+        android:id="@+id/habitsFragment"
+        android:name="com.bloquemae.ui.habits.HabitsFragment"
+        android:label="@string/nav_habits" />
 </navigation>
