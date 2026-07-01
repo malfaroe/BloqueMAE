@@ -22,4 +22,7 @@
     <string name="habit_report_vs_last">vs %1$d/%2$d semana pasada</string>
     <string name="habit_report_overall">Cumplimiento general: %d%%</string>
     <string name="habit_report_empty">Aún no hay datos de hábitos esta semana.</string>
+    <string name="habit_reminder_channel_name">Recordatorio de hábitos</string>
+    <string name="habit_reminder_title">Hábitos pendientes hoy</string>
+    <string name="habit_reminder_text">Te falta: %1$s</string>
 </resources>

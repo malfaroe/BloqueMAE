@@ -84,4 +84,17 @@ object WeekUtils {
 
     fun daysBetweenInclusive(startDay: Long, endDay: Long): Int =
         if (endDay < startDay) 0 else ((endDay - startDay) / 86_400_000L).toInt() + 1
+
+    // Next occurrence of `hour:00` — today if still ahead, otherwise tomorrow.
+    fun nextDailyTime(hour: Int): Long {
+        val cal = Calendar.getInstance()
+        cal.set(Calendar.HOUR_OF_DAY, hour)
+        cal.set(Calendar.MINUTE, 0)
+        cal.set(Calendar.SECOND, 0)
+        cal.set(Calendar.MILLISECOND, 0)
+        if (cal.timeInMillis <= System.currentTimeMillis()) {
+            cal.add(Calendar.DAY_OF_YEAR, 1)
+        }
+        return cal.timeInMillis
+    }
 }
