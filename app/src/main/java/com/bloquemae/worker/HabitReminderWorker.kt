@@ -54,7 +54,7 @@ class HabitReminderWorker(context: Context, params: WorkerParameters) :
         )
 
         val notification = NotificationCompat.Builder(context, CHANNEL_ID)
-            .setSmallIcon(R.mipmap.ic_launcher)
+            .setSmallIcon(R.drawable.ic_notification_star)
             .setContentTitle(context.getString(R.string.habit_reminder_title))
             .setContentText(context.getString(R.string.habit_reminder_text, pendingNames.joinToString(", ")))
             .setContentIntent(openApp)
