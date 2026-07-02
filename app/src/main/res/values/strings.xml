@@ -40,4 +40,7 @@
     <string name="test_notification">Probar notificación ahora</string>
     <string name="test_notification_sent">Notificación enviada — revisa la barra de estado.</string>
     <string name="test_notification_failed">No se pudo enviar — falta el permiso de notificaciones.</string>
+    <string name="history_chart_title">Progreso semanal</string>
+    <string name="history_list_title">Bloques anteriores</string>
+    <string name="block_tasks_empty">Este bloque no tiene tareas.</string>
 </resources>

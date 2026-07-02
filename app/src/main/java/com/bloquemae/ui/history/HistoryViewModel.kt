@@ -7,7 +7,9 @@ import androidx.lifecycle.asLiveData
 import androidx.lifecycle.liveData
 import com.bloquemae.data.AppDatabase
 import com.bloquemae.data.Habit
+import com.bloquemae.data.Task
 import com.bloquemae.util.WeekUtils
+import kotlinx.coroutines.flow.first
 
 data class HabitWeekStat(
     val habitName: String,
@@ -19,10 +21,14 @@ data class HabitWeekStat(
 
 class HistoryViewModel(app: Application) : AndroidViewModel(app) {
     private val blockDao = AppDatabase.get(app).blockDao()
+    private val taskDao = AppDatabase.get(app).taskDao()
     private val habitDao = AppDatabase.get(app).habitDao()
     private val checkinDao = AppDatabase.get(app).habitCheckinDao()
 
     val closedBlocks = blockDao.closedBlocksWithStats().asLiveData()
+
+    suspend fun tasksForBlock(blockId: String): List<Task> =
+        taskDao.tasksForBlock(blockId).first()
 
     // HistoryFragment is recreated each time the user navigates back to this tab
     // (Navigation Component default behavior), so this recomputes on every visit.

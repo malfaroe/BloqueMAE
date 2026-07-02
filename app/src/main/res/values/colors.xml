@@ -8,4 +8,5 @@
     <color name="colorOnPrimary">#FFFFFF</color>
     <color name="colorOnBackground">#E0E0E0</color>
     <color name="colorCarryOver">#FF8F00</color>
+    <color name="colorMuted">#8A8A8A</color>
 </resources>

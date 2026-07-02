@@ -10,7 +10,9 @@ import com.bloquemae.data.BlockWithStats
 import com.bloquemae.databinding.ItemHistoryBlockBinding
 import com.bloquemae.util.WeekUtils
 
-class HistoryAdapter : ListAdapter<BlockWithStats, HistoryAdapter.VH>(DIFF) {
+class HistoryAdapter(
+    private val onClick: (BlockWithStats) -> Unit
+) : ListAdapter<BlockWithStats, HistoryAdapter.VH>(DIFF) {
 
     inner class VH(private val b: ItemHistoryBlockBinding) : RecyclerView.ViewHolder(b.root) {
         fun bind(item: BlockWithStats) {
@@ -22,6 +24,7 @@ class HistoryAdapter : ListAdapter<BlockWithStats, HistoryAdapter.VH>(DIFF) {
             val pct = (item.completionPct * 100).toInt()
             b.textPct.text = b.root.context.getString(R.string.progress_pct, pct)
             b.progressBar.progress = pct
+            b.root.setOnClickListener { onClick(item) }
         }
     }
 
