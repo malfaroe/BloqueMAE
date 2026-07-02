@@ -85,11 +85,15 @@ object WeekUtils {
     fun daysBetweenInclusive(startDay: Long, endDay: Long): Int =
         if (endDay < startDay) 0 else ((endDay - startDay) / 86_400_000L).toInt() + 1
 
-    // Next occurrence of `hour:00` — today if still ahead, otherwise tomorrow.
-    fun nextDailyTime(hour: Int): Long {
-        val cal = Calendar.getInstance()
+    private val santiagoTz = TimeZone.getTimeZone("America/Santiago")
+
+    // Next occurrence of hour:minute in America/Santiago — today if still ahead, otherwise tomorrow.
+    // Uses an explicit timezone (not the device's) so reminder times match Chile regardless of
+    // how the phone is configured.
+    fun nextDailyTime(hour: Int, minute: Int): Long {
+        val cal = Calendar.getInstance(santiagoTz)
         cal.set(Calendar.HOUR_OF_DAY, hour)
-        cal.set(Calendar.MINUTE, 0)
+        cal.set(Calendar.MINUTE, minute)
         cal.set(Calendar.SECOND, 0)
         cal.set(Calendar.MILLISECOND, 0)
         if (cal.timeInMillis <= System.currentTimeMillis()) {

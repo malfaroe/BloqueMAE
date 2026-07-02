@@ -49,4 +49,22 @@ class HabitsViewModel(app: Application) : AndroidViewModel(app) {
             checkinDao.upsert(HabitCheckin(habitId = habit.id, date = today, done = done))
         }
     }
+
+    fun addHabit(name: String) {
+        val trimmed = name.trim()
+        if (trimmed.isEmpty()) return
+        viewModelScope.launch { habitDao.insert(Habit(name = trimmed)) }
+    }
+
+    fun renameHabit(habit: Habit, newName: String) {
+        val trimmed = newName.trim()
+        if (trimmed.isEmpty()) return
+        viewModelScope.launch {
+            habitDao.update(habit.copy(name = trimmed, updatedAt = System.currentTimeMillis()))
+        }
+    }
+
+    fun deleteHabit(habit: Habit) {
+        viewModelScope.launch { habitDao.delete(habit) }
+    }
 }

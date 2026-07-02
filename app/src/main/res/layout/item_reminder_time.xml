@@ -14,34 +14,19 @@
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:paddingStart="8dp"
+        android:paddingStart="16dp"
         android:paddingEnd="4dp"
         android:paddingTop="4dp"
         android:paddingBottom="4dp">
 
-        <CheckBox
-            android:id="@+id/checkBox"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:buttonTint="@color/colorAccent" />
-
         <TextView
-            android:id="@+id/habitName"
+            android:id="@+id/timeText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:layout_marginStart="8dp"
             android:textColor="@color/colorOnBackground"
-            android:textSize="15sp" />
-
-        <ImageButton
-            android:id="@+id/btnEdit"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:src="@android:drawable/ic_menu_edit"
-            android:contentDescription="Editar"
-            app:tint="@color/colorOnBackground" />
+            android:textSize="18sp"
+            android:textStyle="bold" />
 
         <ImageButton
             android:id="@+id/btnDelete"

@@ -5,10 +5,13 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bloquemae.data.Habit
 import com.bloquemae.databinding.ItemHabitCheckinBinding
 
 class HabitCheckInAdapter(
-    private val onToggle: (HabitCheckinState, Boolean) -> Unit
+    private val onToggle: (HabitCheckinState, Boolean) -> Unit,
+    private val onEdit: (Habit) -> Unit,
+    private val onDelete: (Habit) -> Unit
 ) : ListAdapter<HabitCheckinState, HabitCheckInAdapter.VH>(DIFF) {
 
     inner class VH(private val b: ItemHabitCheckinBinding) : RecyclerView.ViewHolder(b.root) {
@@ -17,6 +20,8 @@ class HabitCheckInAdapter(
             b.checkBox.setOnCheckedChangeListener(null)
             b.checkBox.isChecked = state.done
             b.checkBox.setOnCheckedChangeListener { _, checked -> onToggle(state, checked) }
+            b.btnEdit.setOnClickListener { onEdit(state.habit) }
+            b.btnDelete.setOnClickListener { onDelete(state.habit) }
         }
     }
 

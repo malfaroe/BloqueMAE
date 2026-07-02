@@ -10,6 +10,6 @@ class BloqueMAEApp : Application() {
         super.onCreate()
         BlockScheduler.schedule(this)
         HabitReminderWorker.createChannel(this)
-        HabitReminderScheduler.schedule(this)
+        HabitReminderScheduler.scheduleAll(this)
     }
 }

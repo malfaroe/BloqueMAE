@@ -22,6 +22,8 @@ class HabitReminderWorker(context: Context, params: WorkerParameters) :
     CoroutineWorker(context, params) {
 
     override suspend fun doWork(): Result {
+        val time = inputData.getString(HabitReminderScheduler.KEY_TIME)
+
         val db = AppDatabase.get(applicationContext)
         val habitDao = db.habitDao()
         val checkinDao = db.habitCheckinDao()
@@ -34,7 +36,7 @@ class HabitReminderWorker(context: Context, params: WorkerParameters) :
 
         if (pending.isNotEmpty()) showNotification(pending.map { it.name })
 
-        HabitReminderScheduler.schedule(applicationContext)
+        if (time != null) HabitReminderScheduler.rescheduleFor(applicationContext, time)
         return Result.success()
     }
 
