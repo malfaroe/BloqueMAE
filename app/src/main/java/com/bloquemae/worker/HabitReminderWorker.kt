@@ -34,35 +34,10 @@ class HabitReminderWorker(context: Context, params: WorkerParameters) :
         val doneIds = todayCheckins.filter { it.done }.map { it.habitId }.toSet()
         val pending = activeHabits.filter { it.id !in doneIds }
 
-        if (pending.isNotEmpty()) showNotification(pending.map { it.name })
+        if (pending.isNotEmpty()) showNotification(applicationContext, pending.map { it.name })
 
         if (time != null) HabitReminderScheduler.rescheduleFor(applicationContext, time)
         return Result.success()
-    }
-
-    private fun showNotification(pendingNames: List<String>) {
-        val context = applicationContext
-        val hasPermission = Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU ||
-            ContextCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) ==
-                PackageManager.PERMISSION_GRANTED
-        if (!hasPermission) return
-
-        val openApp = PendingIntent.getActivity(
-            context, 0,
-            Intent(context, MainActivity::class.java),
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-        )
-
-        val notification = NotificationCompat.Builder(context, CHANNEL_ID)
-            .setSmallIcon(R.drawable.ic_notification_star)
-            .setContentTitle(context.getString(R.string.habit_reminder_title))
-            .setContentText(context.getString(R.string.habit_reminder_text, pendingNames.joinToString(", ")))
-            .setContentIntent(openApp)
-            .setAutoCancel(true)
-            .build()
-
-        (context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager)
-            .notify(NOTIFICATION_ID, notification)
     }
 
     companion object {
@@ -77,6 +52,34 @@ class HabitReminderWorker(context: Context, params: WorkerParameters) :
             )
             (context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager)
                 .createNotificationChannel(channel)
+        }
+
+        fun hasNotificationPermission(context: Context): Boolean =
+            Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU ||
+                ContextCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) ==
+                    PackageManager.PERMISSION_GRANTED
+
+        // Returns true if the notification was actually posted (i.e. permission was granted).
+        fun showNotification(context: Context, pendingNames: List<String>): Boolean {
+            if (!hasNotificationPermission(context)) return false
+
+            val openApp = PendingIntent.getActivity(
+                context, 0,
+                Intent(context, MainActivity::class.java),
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+            )
+
+            val notification = NotificationCompat.Builder(context, CHANNEL_ID)
+                .setSmallIcon(R.drawable.ic_notification_star)
+                .setContentTitle(context.getString(R.string.habit_reminder_title))
+                .setContentText(context.getString(R.string.habit_reminder_text, pendingNames.joinToString(", ")))
+                .setContentIntent(openApp)
+                .setAutoCancel(true)
+                .build()
+
+            (context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager)
+                .notify(NOTIFICATION_ID, notification)
+            return true
         }
     }
 }

@@ -34,4 +34,10 @@
     <string name="save">Guardar</string>
     <string name="reminders_empty">No hay recordatorios configurados.</string>
     <string name="nav_reminders">Recordatorios</string>
+    <string name="notif_permission_warning">Las notificaciones están desactivadas para esta app. Los recordatorios no van a sonar hasta que las actives.</string>
+    <string name="exact_alarm_warning">Falta el permiso de \"Alarmas y recordatorios\". Sin él, el sistema puede retrasar o saltarse la hora exacta.</string>
+    <string name="open_settings">Abrir ajustes</string>
+    <string name="test_notification">Probar notificación ahora</string>
+    <string name="test_notification_sent">Notificación enviada — revisa la barra de estado.</string>
+    <string name="test_notification_failed">No se pudo enviar — falta el permiso de notificaciones.</string>
 </resources>

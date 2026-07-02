@@ -6,10 +6,20 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.bloquemae.util.ReminderPrefs
 import com.bloquemae.worker.HabitReminderScheduler
+import com.bloquemae.worker.HabitReminderWorker
 
 class RemindersViewModel(app: Application) : AndroidViewModel(app) {
     private val _times = MutableLiveData(ReminderPrefs.getTimes(app))
     val times: LiveData<List<String>> = _times
+
+    fun hasNotificationPermission(): Boolean =
+        HabitReminderWorker.hasNotificationPermission(getApplication())
+
+    fun canScheduleExactAlarms(): Boolean =
+        HabitReminderScheduler.canScheduleExactAlarms(getApplication())
+
+    fun fireTestNotification(): Boolean =
+        HabitReminderWorker.showNotification(getApplication(), listOf("Prueba"))
 
     fun addTime(hour: Int, minute: Int) {
         val time = "%02d:%02d".format(hour, minute)
