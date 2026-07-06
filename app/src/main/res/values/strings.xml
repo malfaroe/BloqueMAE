@@ -47,6 +47,7 @@
     <string name="daily_review_hint">¿Cómo estuvo tu día?</string>
     <string name="daily_review_past_title">Reflexiones anteriores</string>
     <string name="daily_review_empty">Aún no hay reflexiones guardadas.</string>
+    <string name="daily_review_saved">Reflexión guardada</string>
     <string name="delete_review_title">¿Eliminar reflexión?</string>
     <string name="delete_review_message">Se perderá el texto de este día.</string>
 </resources>

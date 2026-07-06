@@ -1,9 +1,13 @@
 package com.bloquemae.ui.dailyreview
 
+import android.content.Context
 import android.os.Bundle
 import android.text.InputType
+import android.text.method.ScrollingMovementMethod
 import android.view.*
+import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -30,12 +34,15 @@ class DailyReviewFragment : Fragment() {
         b.recycler.adapter = adapter
 
         b.textToday.text = WeekUtils.formatDay(vm.today)
+        b.editToday.movementMethod = ScrollingMovementMethod.getInstance()
         viewLifecycleOwner.lifecycleScope.launch {
             vm.getByDate(vm.today)?.let { b.editToday.setText(it.text) }
         }
 
         b.btnSaveToday.setOnClickListener {
             vm.save(vm.today, b.editToday.text.toString())
+            hideKeyboard(b.editToday)
+            Toast.makeText(requireContext(), R.string.daily_review_saved, Toast.LENGTH_SHORT).show()
         }
 
         vm.pastReviews.observe(viewLifecycleOwner) { reviews ->
@@ -50,6 +57,8 @@ class DailyReviewFragment : Fragment() {
         val input = EditText(requireContext()).apply {
             setText(review.text)
             minLines = 3
+            maxLines = 10
+            movementMethod = ScrollingMovementMethod.getInstance()
             gravity = Gravity.TOP
             inputType = InputType.TYPE_TEXT_FLAG_MULTI_LINE or InputType.TYPE_TEXT_FLAG_CAP_SENTENCES
             setSelection(text.length)
@@ -57,7 +66,10 @@ class DailyReviewFragment : Fragment() {
         AlertDialog.Builder(requireContext())
             .setTitle(WeekUtils.formatDay(review.date))
             .setView(input)
-            .setPositiveButton(R.string.save) { _, _ -> vm.save(review.date, input.text.toString()) }
+            .setPositiveButton(R.string.save) { _, _ ->
+                vm.save(review.date, input.text.toString())
+                Toast.makeText(requireContext(), R.string.daily_review_saved, Toast.LENGTH_SHORT).show()
+            }
             .setNegativeButton(R.string.cancel, null)
             .setNeutralButton(R.string.delete) { _, _ -> confirmDelete(review) }
             .show()
@@ -70,6 +82,11 @@ class DailyReviewFragment : Fragment() {
             .setPositiveButton(R.string.delete) { _, _ -> vm.delete(review) }
             .setNegativeButton(R.string.cancel, null)
             .show()
+    }
+
+    private fun hideKeyboard(view: View) {
+        val imm = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(view.windowToken, 0)
     }
 
     override fun onDestroyView() {
