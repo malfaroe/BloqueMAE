@@ -23,4 +23,9 @@
         android:id="@+id/remindersFragment"
         android:name="com.bloquemae.ui.reminders.RemindersFragment"
         android:label="@string/nav_reminders" />
+
+    <fragment
+        android:id="@+id/dailyReviewFragment"
+        android:name="com.bloquemae.ui.dailyreview.DailyReviewFragment"
+        android:label="@string/nav_daily_review" />
 </navigation>

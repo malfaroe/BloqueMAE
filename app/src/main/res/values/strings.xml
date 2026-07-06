@@ -43,4 +43,10 @@
     <string name="history_chart_title">Progreso semanal</string>
     <string name="history_list_title">Bloques anteriores</string>
     <string name="block_tasks_empty">Este bloque no tiene tareas.</string>
+    <string name="nav_daily_review">Daily Review</string>
+    <string name="daily_review_hint">¿Cómo estuvo tu día?</string>
+    <string name="daily_review_past_title">Reflexiones anteriores</string>
+    <string name="daily_review_empty">Aún no hay reflexiones guardadas.</string>
+    <string name="delete_review_title">¿Eliminar reflexión?</string>
+    <string name="delete_review_message">Se perderá el texto de este día.</string>
 </resources>

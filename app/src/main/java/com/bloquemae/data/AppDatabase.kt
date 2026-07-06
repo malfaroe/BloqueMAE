@@ -8,13 +8,18 @@ import androidx.room.TypeConverters
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 
-@Database(entities = [Block::class, Task::class, Habit::class, HabitCheckin::class], version = 2, exportSchema = true)
+@Database(
+    entities = [Block::class, Task::class, Habit::class, HabitCheckin::class, DailyReview::class],
+    version = 3,
+    exportSchema = true
+)
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun blockDao(): BlockDao
     abstract fun taskDao(): TaskDao
     abstract fun habitDao(): HabitDao
     abstract fun habitCheckinDao(): HabitCheckinDao
+    abstract fun dailyReviewDao(): DailyReviewDao
 
     companion object {
         @Volatile private var INSTANCE: AppDatabase? = null
@@ -49,6 +54,21 @@ abstract class AppDatabase : RoomDatabase() {
             }
         }
 
+        // Adds the daily-review table without touching existing data.
+        private val MIGRATION_2_3 = object : Migration(2, 3) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL(
+                    """
+                    CREATE TABLE IF NOT EXISTS daily_reviews (
+                        date INTEGER NOT NULL PRIMARY KEY,
+                        text TEXT NOT NULL,
+                        updatedAt INTEGER NOT NULL
+                    )
+                    """.trimIndent()
+                )
+            }
+        }
+
         fun get(context: Context): AppDatabase =
             INSTANCE ?: synchronized(this) {
                 INSTANCE ?: Room.databaseBuilder(
@@ -56,7 +76,7 @@ abstract class AppDatabase : RoomDatabase() {
                     AppDatabase::class.java,
                     "bloquemae.db"
                 )
-                    .addMigrations(MIGRATION_1_2)
+                    .addMigrations(MIGRATION_1_2, MIGRATION_2_3)
                     .fallbackToDestructiveMigration()
                     .build()
                     .also { INSTANCE = it }

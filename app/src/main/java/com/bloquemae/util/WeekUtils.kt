@@ -56,6 +56,12 @@ object WeekUtils {
         return "${fmt.format(Date(start))} – ${fmt.format(Date(end))}"
     }
 
+    fun formatDay(date: Long): String {
+        val fmt = SimpleDateFormat("EEEE d 'de' MMMM yyyy", locale)
+        val text = fmt.format(Date(date))
+        return text.replaceFirstChar { it.uppercase() }
+    }
+
     fun isBlockExpired(weekEnd: Long): Boolean = System.currentTimeMillis() > weekEnd
 
     fun startOfDay(time: Long = System.currentTimeMillis()): Long {
