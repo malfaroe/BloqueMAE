@@ -3,7 +3,6 @@ package com.bloquemae.ui.dailyreview
 import android.content.Context
 import android.os.Bundle
 import android.text.InputType
-import android.text.method.ScrollingMovementMethod
 import android.view.*
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
@@ -34,7 +33,6 @@ class DailyReviewFragment : Fragment() {
         b.recycler.adapter = adapter
 
         b.textToday.text = WeekUtils.formatDay(vm.today)
-        b.editToday.movementMethod = ScrollingMovementMethod.getInstance()
         viewLifecycleOwner.lifecycleScope.launch {
             vm.getByDate(vm.today)?.let { b.editToday.setText(it.text) }
         }
@@ -54,13 +52,14 @@ class DailyReviewFragment : Fragment() {
     }
 
     private fun showEditDialog(review: DailyReview) {
+        val padding = (20 * resources.displayMetrics.density).toInt()
         val input = EditText(requireContext()).apply {
             setText(review.text)
             minLines = 3
             maxLines = 10
-            movementMethod = ScrollingMovementMethod.getInstance()
             gravity = Gravity.TOP
             inputType = InputType.TYPE_TEXT_FLAG_MULTI_LINE or InputType.TYPE_TEXT_FLAG_CAP_SENTENCES
+            setPadding(padding, padding / 2, padding, padding / 2)
             setSelection(text.length)
         }
         AlertDialog.Builder(requireContext())
