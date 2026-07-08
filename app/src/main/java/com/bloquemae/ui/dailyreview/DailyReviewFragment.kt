@@ -58,7 +58,7 @@ class DailyReviewFragment : Fragment() {
             minLines = 3
             maxLines = 10
             gravity = Gravity.TOP
-            inputType = InputType.TYPE_TEXT_FLAG_MULTI_LINE or InputType.TYPE_TEXT_FLAG_CAP_SENTENCES
+            inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_MULTI_LINE or InputType.TYPE_TEXT_FLAG_CAP_SENTENCES
             setPadding(padding, padding / 2, padding, padding / 2)
             setSelection(text.length)
         }
